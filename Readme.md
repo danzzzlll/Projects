@@ -2,8 +2,8 @@
 
 ## projects
 
-Folder | What’s inside | Key highlights
--------|--------------|---------------
+Folder | What’s inside | 
+-------|--------------|
 `CustomReranker/` | Custom post‑ranking module that plugs a **CatBoost** model into **Llama‑Index**’s `BaseNodePostprocessor`. Contains a serialised `.cbm` model, Python wrapper class, and a demo notebook that shows how to call the reranker on retrieved nodes. 
 `NLP/` | Covering NLP models: Transformer, word2vec, rnn, also speculative decoding.
 `OnlineSoftmax/` | A collection of numerically‑stable softmax implementations (PyTorch + Triton): 1‑D streaming softmax, block‑wise batched softmax, and GPU kernels for online reduction.
