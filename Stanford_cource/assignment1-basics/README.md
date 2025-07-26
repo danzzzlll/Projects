@@ -1,63 +1,75 @@
-# CS336 Spring 2025 Assignment 1: Basics
+# CS336 Spring 2025 – Assignment 1: Basics
 
-For a full description of the assignment, see the assignment handout at
-[cs336_spring2025_assignment1_basics.pdf](./cs336_spring2025_assignment1_basics.pdf)
+**Language Modeling from Scratch**
 
-If you see any issues with the assignment handout or code, please feel free to
-raise a GitHub issue or open a pull request with a fix.
+# My Realization of GPT2
 
-
-# This is My solution of First Homework of CS336 
-
-I added my code to tests/transformer_methods/
-Also dir notebooks has tinystories corpus for training and full notebook with methods in above folder.
-
-For training LM you should watch tests/transformer_methods/training.py for Custom TransofrmerTrainer.
-
-I can't run all the experiments I want because I`m not gpu-rich.
-
-Most functions in tests/adapters.py are ready for testing - uv run pytest ./tests/
-
-
-## Setup
-
-### Environment
-We manage our environments with `uv` to ensure reproducibility, portability, and ease of use.
-Install `uv` [here](https://github.com/astral-sh/uv) (recommended), or run `pip install uv`/`brew install uv`.
-We recommend reading a bit about managing projects in `uv` [here](https://docs.astral.sh/uv/guides/projects/#managing-dependencies) (you will not regret it!).
-
-You can now run any code in the repo using
-```sh
-uv run <python_file_path>
+It can be found in folder
 ```
-and the environment will be automatically solved and activated when necessary.
-
-### Run unit tests
-
-
-```sh
-uv run pytest
+tests/transformer_methods/
+```
+All tests from cource are passed and realization for them is in folder
+```
+tests/adapters.py
 ```
 
-Initially, all tests should fail with `NotImplementedError`s.
-To connect your implementation to the tests, complete the
-functions in [./tests/adapters.py](./tests/adapters.py).
+## 📌 Overview
 
-### Download data
-Download the TinyStories data and a subsample of OpenWebText
+In this assignment, I implemented all core components required to train a Transformer-based language model from scratch. The main parts include:
 
-``` sh
-mkdir -p data
-cd data
+- A byte-level BPE tokenizer
+- A Transformer language model
+- Cross-entropy loss and AdamW optimizer
+- A training loop with checkpointing and text generation
 
-wget https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStoriesV2-GPT4-train.txt
-wget https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStoriesV2-GPT4-valid.txt
+## 🚀 Builded Stages
 
-wget https://huggingface.co/datasets/stanford-cs336/owt-sample/resolve/main/owt_train.txt.gz
-gunzip owt_train.txt.gz
-wget https://huggingface.co/datasets/stanford-cs336/owt-sample/resolve/main/owt_valid.txt.gz
-gunzip owt_valid.txt.gz
+### 1. **Byte-Pair Encoding (BPE) Tokenizer**
+- Initialize vocabulary with all 256 byte values
+- Pre-tokenization using regex
+- Learn BPE merge rules from the training corpus
+- Encode text into token ID sequences
+- Report on:
+  - Compression ratio (bytes/token)
+  - Comparison: TinyStories vs OpenWebText
+  - Throughput (bytes/sec)
+  - Estimated time to tokenize a large corpus
+  - Rationale for using `uint16` for serialization
 
-cd ..
-```
+### 2. **Transformer Language Model**
+- Implement full Transformer LM architecture:
+  - Parameters: `d_model`, `num_heads`, `d_ff`, `num_layers`
+  - Positional and token embeddings
+- Use Pre-norm Transformer blocks with:
+  - RMSNorm
+  - Causal (masked) multi-head self-attention
+  - Feedforward layers
+- Final linear layer for language modeling (LM head)
+
+### 3. **Cross-Entropy Loss & AdamW Optimizer**
+- Implement numerically stable, log-softmax-based cross-entropy
+- Mean over batch dimension
+- Implement AdamW optimizer from scratch:
+  - Correct bias correction
+  - Proper step tracking
+  - Separate handling for parameters
+
+### 4. **Training Loop**
+- Load and preprocess datasets
+- Train Transformer model
+- Save and load model checkpoints
+- Evaluate perplexity on validation data
+- Generate text with:
+  - Temperature sampling
+  - Top-p (nucleus) sampling
+  - Max token limits
+
+## 🧪 Running the Code
+
+### Setup
+
+```bash
+uv install
+uv run <your_script.py>
+
 
